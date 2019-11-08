@@ -14,9 +14,9 @@ long double Calculate_Pi_Sequential(long long number_of_tosses) {
 
     long long number_in_circle = 0;
     for (int toss = 0; toss < number_of_tosses; toss++) {
-        long double x = getRand(&seed);
-        long double y = getRand(&seed);
-        long double distance_squared = x*x + y*y;
+        double x = getRand(&seed);
+        double y = getRand(&seed);
+        double distance_squared = x*x + y*y;
         if (distance_squared <= 1) number_in_circle++;
     }
     long double pi_estimate = 4*number_in_circle/((long double) number_of_tosses);
@@ -34,9 +34,9 @@ long double Calculate_Pi_Parallel(long long number_of_tosses) {
         unsigned int seed = (unsigned int) time(NULL) + (unsigned int) omp_get_thread_num();
 
         for (int toss = 0; toss < number_of_tosses; toss++) {
-            long double x = getRand(&seed);
-            long double y = getRand(&seed);
-            long double distance_squared = x*x + y*y;
+            double x = getRand(&seed);
+            double y = getRand(&seed);
+            double distance_squared = x*x + y*y;
             if (distance_squared <= 1) number_in_circle++;
         }
         pi_estimate = 4*number_in_circle/((long double) number_of_tosses);
