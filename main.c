@@ -32,18 +32,20 @@ long double Calculate_Pi_Parallel(long long number_of_tosses) {
     long long number_in_circle = 0;
     double x, y, distance_squared;
 
-    #pragma omp parallel num_threads(omp_get_max_threads()) private(x,y,distance_squared) reduction(+: number_in_circle)
+    #pragma omp parallel num_threads(omp_get_max_threads()) private(x,y,distance_squared) reduction(+: number_in_circle) //Creates a parallel region and reduces the sum of number_in_circle to prevent data races
     {
         unsigned int seed = (unsigned int) time(NULL) + (unsigned int) omp_get_thread_num();
 
+        #pragma omp for //Distributes the work done in the for loop between all threads instead of each one doing it separately
         for (int toss = 0; toss < number_of_tosses; toss++) {
             x = getRand(&seed);
             y = getRand(&seed);
             distance_squared = x*x + y*y;
             if (distance_squared <= 1) number_in_circle++;
         }
-        pi_estimate = 4*number_in_circle/((long double) number_of_tosses);
     }
+
+    pi_estimate = 4*number_in_circle/((long double) number_of_tosses);
 
     return pi_estimate;
 }
